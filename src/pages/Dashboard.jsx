@@ -9,7 +9,6 @@ export default function Dashboard() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    if (!currentUser) return;
     const q = query(
       collection(db, "bookings"),
       where("userId", "==", currentUser.uid)
@@ -30,11 +29,23 @@ export default function Dashboard() {
       <h1 className="mt-1 font-display text-3xl font-bold text-ink">
         My Bookings
       </h1>
+
       {loading ? (
-        <p className="mt-6 text-ink/50">Loading...</p>
+        <div className="mt-6 space-y-3">
+          {[1, 2].map((i) => (
+            <div
+              key={i}
+              className="animate-pulse rounded-xl bg-white p-4 shadow-sm ring-1 ring-black/5"
+            >
+              <div className="h-4 w-2/3 rounded bg-paper-dim" />
+              <div className="mt-2 h-3 w-1/3 rounded bg-paper-dim" />
+            </div>
+          ))}
+        </div>
       ) : bookings.length === 0 ? (
         <div className="mt-8 rounded-2xl border-2 border-dashed border-paper-dim bg-white/50 py-14 text-center">
-          <p className="font-display font-bold text-ink">No tickets yet</p>          <p className="mt-1 text-sm text-ink/50">
+          <p className="font-display font-bold text-ink">No tickets yet</p>
+          <p className="mt-1 text-sm text-ink/50">
             Book an event to see it here.
           </p>
         </div>

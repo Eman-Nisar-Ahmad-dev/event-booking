@@ -123,13 +123,18 @@ export default function Admin() {
             className={inputClass}
           />
         </div>
-        <input
-          name="location"
-          value={form.location}
-          onChange={handleChange}
-          placeholder="Location"
-          className={inputClass}
-        />
+        <div className="relative">
+          <span className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-sm">
+            📍
+          </span>
+          <input
+            name="location"
+            value={form.location}
+            onChange={handleChange}
+            placeholder="Location"
+            className={`${inputClass} pl-9`}
+          />
+        </div>
         <input
           name="image"
           value={form.image}
@@ -138,24 +143,34 @@ export default function Admin() {
           className={inputClass}
         />
         <div className="grid grid-cols-2 gap-3">
-          <input
-            type="number"
-            name="totalSeats"
-            value={form.totalSeats}
-            onChange={handleChange}
-            min={1}
-            placeholder="Total seats"
-            className={inputClass}
-          />
-          <input
-            type="number"
-            name="price"
-            value={form.price}
-            onChange={handleChange}
-            min={0}
-            placeholder="Price (0 = free)"
-            className={inputClass}
-          />
+          <div className="relative">
+            <span className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-sm">
+              🎟️
+            </span>
+            <input
+              type="number"
+              name="totalSeats"
+              value={form.totalSeats}
+              onChange={handleChange}
+              min={1}
+              placeholder="Total seats"
+              className={`${inputClass} pl-9`}
+            />
+          </div>
+          <div className="relative">
+            <span className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-sm text-ink/40">
+              $
+            </span>
+            <input
+              type="number"
+              name="price"
+              value={form.price}
+              onChange={handleChange}
+              min={0}
+              placeholder="Price (0 = free)"
+              className={`${inputClass} pl-7`}
+            />
+          </div>
         </div>
 
         <button
@@ -184,7 +199,7 @@ export default function Admin() {
             </div>
             <button
               onClick={() => handleDelete(ev.id)}
-              className="rounded-full bg-coral/10 px-4 py-1.5 text-sm font-medium text-coral transition hover:bg-coral/20"
+              className="rounded-full bg-coral/10 px-4 py-1.5 text-sm font-medium text-coral transition hover:scale-105 hover:bg-coral/20 hover:shadow-sm active:scale-95"
             >
               Delete
             </button>

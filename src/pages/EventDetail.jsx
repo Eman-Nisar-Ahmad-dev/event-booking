@@ -66,7 +66,18 @@ export default function EventDetail() {
   }
 
   if (!event)
-    return <p className="p-10 text-center text-ink/50">Loading event...</p>;
+    return (
+      <div className="mx-auto max-w-2xl animate-pulse px-6 py-12">
+        <div className="overflow-hidden rounded-2xl bg-white shadow-sm ring-1 ring-black/5">
+          <div className="h-64 w-full bg-paper-dim" />
+          <div className="space-y-3 p-8">
+            <div className="h-3 w-24 rounded bg-paper-dim" />
+            <div className="h-6 w-2/3 rounded bg-paper-dim" />
+            <div className="h-3 w-1/2 rounded bg-paper-dim" />
+          </div>
+        </div>
+      </div>
+    );
 
   const seatsLeft = event.totalSeats - event.seatsBooked;
   const soldOut = seatsLeft <= 0;
