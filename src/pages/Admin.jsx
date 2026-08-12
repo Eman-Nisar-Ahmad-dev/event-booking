@@ -20,6 +20,9 @@ const emptyForm = {
   price: 0,
 };
 
+const inputClass =
+  "w-full rounded-lg border border-paper-dim bg-white px-3 py-2.5 text-sm outline-none transition focus:border-gold focus:ring-2 focus:ring-gold/20";
+
 export default function Admin() {
   const [events, setEvents] = useState([]);
   const [form, setForm] = useState(emptyForm);
@@ -70,19 +73,31 @@ export default function Admin() {
   }
 
   return (
-    <div className="mx-auto max-w-3xl px-6 py-10">
-      <h1 className="text-2xl font-bold text-slate-900">Manage Events</h1>
+    <div className="mx-auto max-w-3xl px-6 py-12">
+      <p className="font-mono text-xs uppercase tracking-widest text-gold-dark">
+        Backstage
+      </p>
+      <h1 className="mt-1 font-display text-3xl font-bold text-ink">
+        Manage Events
+      </h1>
 
-      <form onSubmit={handleSubmit} className="mt-6 space-y-3 rounded-lg border border-slate-200 p-5">
-        <h2 className="font-semibold text-slate-800">Add new event</h2>
-        {error && <p className="text-sm text-red-500">{error}</p>}
+      <form
+        onSubmit={handleSubmit}
+        className="mt-6 space-y-3 rounded-2xl bg-white p-6 shadow-sm ring-1 ring-black/5"
+      >
+        <h2 className="font-display font-bold text-ink">Add new event</h2>
+        {error && (
+          <p className="rounded-lg bg-coral/10 px-3 py-2 text-sm text-coral">
+            {error}
+          </p>
+        )}
 
         <input
           name="title"
           value={form.title}
           onChange={handleChange}
           placeholder="Event title"
-          className="w-full rounded border border-slate-300 px-3 py-2"
+          className={inputClass}
         />
         <textarea
           name="description"
@@ -90,7 +105,7 @@ export default function Admin() {
           onChange={handleChange}
           placeholder="Description"
           rows={3}
-          className="w-full rounded border border-slate-300 px-3 py-2"
+          className={inputClass}
         />
         <div className="grid grid-cols-2 gap-3">
           <input
@@ -98,14 +113,14 @@ export default function Admin() {
             name="date"
             value={form.date}
             onChange={handleChange}
-            className="rounded border border-slate-300 px-3 py-2"
+            className={inputClass}
           />
           <input
             type="time"
             name="time"
             value={form.time}
             onChange={handleChange}
-            className="rounded border border-slate-300 px-3 py-2"
+            className={inputClass}
           />
         </div>
         <input
@@ -113,14 +128,14 @@ export default function Admin() {
           value={form.location}
           onChange={handleChange}
           placeholder="Location"
-          className="w-full rounded border border-slate-300 px-3 py-2"
+          className={inputClass}
         />
         <input
           name="image"
           value={form.image}
           onChange={handleChange}
           placeholder="Image URL (optional)"
-          className="w-full rounded border border-slate-300 px-3 py-2"
+          className={inputClass}
         />
         <div className="grid grid-cols-2 gap-3">
           <input
@@ -130,7 +145,7 @@ export default function Admin() {
             onChange={handleChange}
             min={1}
             placeholder="Total seats"
-            className="rounded border border-slate-300 px-3 py-2"
+            className={inputClass}
           />
           <input
             type="number"
@@ -139,35 +154,37 @@ export default function Admin() {
             onChange={handleChange}
             min={0}
             placeholder="Price (0 = free)"
-            className="rounded border border-slate-300 px-3 py-2"
+            className={inputClass}
           />
         </div>
 
         <button
           type="submit"
           disabled={saving}
-          className="rounded bg-emerald-500 px-5 py-2 font-medium text-white hover:bg-emerald-600 disabled:opacity-50"
+          className="rounded-full bg-marquee px-6 py-2.5 font-display font-bold text-paper transition hover:bg-marquee-light disabled:opacity-50"
         >
           {saving ? "Saving..." : "Add event"}
         </button>
       </form>
 
-      <h2 className="mt-10 font-semibold text-slate-800">Existing events</h2>
+      <h2 className="mt-10 font-display font-bold text-ink">
+        Existing events
+      </h2>
       <ul className="mt-3 space-y-2">
         {events.map((ev) => (
           <li
             key={ev.id}
-            className="flex items-center justify-between rounded border border-slate-200 p-3"
+            className="flex items-center justify-between rounded-xl bg-white p-4 shadow-sm ring-1 ring-black/5"
           >
             <div>
-              <p className="font-medium text-slate-900">{ev.title}</p>
-              <p className="text-sm text-slate-500">
+              <p className="font-display font-bold text-ink">{ev.title}</p>
+              <p className="mt-0.5 font-mono text-xs text-ink/40">
                 {ev.date} · {ev.seatsBooked}/{ev.totalSeats} booked
               </p>
             </div>
             <button
               onClick={() => handleDelete(ev.id)}
-              className="rounded bg-red-500 px-3 py-1.5 text-sm font-medium text-white hover:bg-red-600"
+              className="rounded-full bg-coral/10 px-4 py-1.5 text-sm font-medium text-coral transition hover:bg-coral/20"
             >
               Delete
             </button>

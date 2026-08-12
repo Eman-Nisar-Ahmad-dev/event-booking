@@ -1,6 +1,51 @@
+@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;700&family=Inter:wght@400;500;600&family=Space+Mono:wght@400;700&display=swap');
 @import "tailwindcss";
+
+@theme {
+  --color-ink: #1a1a2e;
+  --color-marquee: #1b1b3a;
+  --color-marquee-light: #292960;
+  --color-paper: #faf7f0;
+  --color-paper-dim: #f0ebe0;
+  --color-gold: #f0a93c;
+  --color-gold-dark: #d6931f;
+  --color-coral: #e8555b;
+  --color-mint: #2f9e6e;
+  --font-display: "Space Grotesk", sans-serif;
+  --font-body: "Inter", sans-serif;
+  --font-mono: "Space Mono", monospace;
+}
 
 body {
   margin: 0;
-  font-family: system-ui, -apple-system, sans-serif;
+  background-color: var(--color-paper);
+  color: var(--color-ink);
+  font-family: var(--font-body);
+}
+
+h1, h2, h3, .font-display {
+  font-family: var(--font-display);
+}
+
+.font-mono {
+  font-family: var(--font-mono);
+}
+
+/* Ticket perforation notches */
+.ticket-notch {
+  position: absolute;
+  width: 20px;
+  height: 20px;
+  background: var(--color-paper);
+  border-radius: 9999px;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+.ticket-notch-left {
+  left: -10px;
+}
+
+.ticket-notch-right {
+  right: -10px;
 }

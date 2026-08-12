@@ -36,7 +36,6 @@ export default function EventDetail() {
     setStatus("");
 
     try {
-      // Transaction ensures seat count updates safely even with concurrent bookings
       await runTransaction(db, async (transaction) => {
         const eventRef = doc(db, "events", id);
         const eventDoc = await transaction.get(eventRef);
@@ -66,44 +65,71 @@ export default function EventDetail() {
     setBooking(false);
   }
 
-  if (!event) return <p className="p-6 text-slate-500">Loading event...</p>;
+  if (!event)
+    return <p className="p-10 text-center text-ink/50">Loading event...</p>;
 
   const seatsLeft = event.totalSeats - event.seatsBooked;
   const soldOut = seatsLeft <= 0;
+  const eventId = `#EVT-${event.id.slice(0, 4).toUpperCase()}`;
 
   return (
-    <div className="mx-auto max-w-2xl px-6 py-10">
-      <img
-        src={event.image || "https://placehold.co/800x400?text=Event"}
-        alt={event.title}
-        className="w-full rounded-lg object-cover"
-      />
-      <h1 className="mt-6 text-3xl font-bold text-slate-900">{event.title}</h1>
-      <p className="mt-2 text-slate-500">
-        {event.date} at {event.time} · {event.location}
-      </p>
-      <p className="mt-4 text-slate-700">{event.description}</p>
+    <div className="mx-auto max-w-2xl px-6 py-12">
+      <div className="overflow-hidden rounded-2xl bg-white shadow-sm ring-1 ring-black/5">
+        <img
+          src={event.image || "https://placehold.co/800x400/1b1b3a/f0a93c?text=Event"}
+          alt={event.title}
+          className="h-64 w-full object-cover"
+        />
 
-      <div className="mt-6 flex items-center justify-between rounded-lg border border-slate-200 p-4">
-        <span className={soldOut ? "text-red-500" : "text-emerald-600"}>
-          {soldOut ? "Sold out" : `${seatsLeft} seats left`}
-        </span>
-        <button
-          onClick={handleBook}
-          disabled={soldOut || booking}
-          className="rounded bg-emerald-500 px-5 py-2 font-medium text-white hover:bg-emerald-600 disabled:opacity-50"
-        >
-          {booking ? "Booking..." : soldOut ? "Sold out" : "Book now"}
-        </button>
+        <div className="p-8">
+          <p className="font-mono text-xs uppercase tracking-widest text-gold-dark">
+            {eventId}
+          </p>
+          <h1 className="mt-2 font-display text-3xl font-bold text-ink">
+            {event.title}
+          </h1>
+          <p className="mt-2 text-ink/60">
+            {event.date} at {event.time} · {event.location}
+          </p>
+          <p className="mt-4 leading-relaxed text-ink/80">{event.description}</p>
+        </div>
+
+        {/* Perforated ticket stub */}
+        <div className="relative border-t-2 border-dashed border-paper-dim bg-white">
+          <span className="ticket-notch ticket-notch-left" />
+          <span className="ticket-notch ticket-notch-right" />
+        </div>
+
+        <div className="flex items-center justify-between bg-paper-dim/40 p-6">
+          <div>
+            <p className="font-mono text-xs text-ink/40">Availability</p>
+            <p
+              className={`font-display text-lg font-bold ${
+                soldOut ? "text-coral" : "text-mint"
+              }`}
+            >
+              {soldOut ? "Sold out" : `${seatsLeft} seats left`}
+            </p>
+          </div>
+          <button
+            onClick={handleBook}
+            disabled={soldOut || booking}
+            className="rounded-full bg-gold px-6 py-3 font-display font-bold text-marquee transition hover:bg-gold-dark disabled:cursor-not-allowed disabled:opacity-50"
+          >
+            {booking ? "Booking..." : soldOut ? "Sold out" : "Book now"}
+          </button>
+        </div>
       </div>
 
       {status === "success" && (
-        <p className="mt-4 text-sm text-emerald-600">
+        <p className="mt-4 text-center text-sm font-medium text-mint">
           Booked! Check "My Bookings" to see it.
         </p>
       )}
       {status && status !== "success" && (
-        <p className="mt-4 text-sm text-red-500">{status}</p>
+        <p className="mt-4 text-center text-sm font-medium text-coral">
+          {status}
+        </p>
       )}
     </div>
   );
