@@ -6,6 +6,8 @@ import {
   runTransaction,
   collection,
   addDoc,
+  query,
+  where,
   serverTimestamp,
 } from "firebase/firestore";
 import { db } from "../firebase";
@@ -16,6 +18,8 @@ export default function EventDetail() {
   const [event, setEvent] = useState(null);
   const [status, setStatus] = useState("");
   const [booking, setBooking] = useState(false);
+  const [alreadyBooked, setAlreadyBooked] = useState(false);
+  const [checkingBooking, setCheckingBooking] = useState(true);
   const { currentUser } = useAuth();
   const navigate = useNavigate();
 
@@ -26,9 +30,32 @@ export default function EventDetail() {
     return unsubscribe;
   }, [id]);
 
+  // Check if this user has already booked this event
+  useEffect(() => {
+    if (!currentUser) {
+      setCheckingBooking(false);
+      return;
+    }
+    const q = query(
+      collection(db, "bookings"),
+      where("userId", "==", currentUser.uid),
+      where("eventId", "==", id)
+    );
+    const unsubscribe = onSnapshot(q, (snapshot) => {
+      setAlreadyBooked(!snapshot.empty);
+      setCheckingBooking(false);
+    });
+    return unsubscribe;
+  }, [currentUser, id]);
+
   async function handleBook() {
     if (!currentUser) {
       navigate("/login");
+      return;
+    }
+
+    if (alreadyBooked) {
+      setStatus("You've already booked this event.");
       return;
     }
 
@@ -124,10 +151,16 @@ export default function EventDetail() {
           </div>
           <button
             onClick={handleBook}
-            disabled={soldOut || booking}
+            disabled={soldOut || booking || alreadyBooked || checkingBooking}
             className="rounded-full bg-gold px-6 py-3 font-display font-bold text-marquee transition hover:bg-gold-dark disabled:cursor-not-allowed disabled:opacity-50"
           >
-            {booking ? "Booking..." : soldOut ? "Sold out" : "Book now"}
+            {alreadyBooked
+              ? "Already booked"
+              : booking
+              ? "Booking..."
+              : soldOut
+              ? "Sold out"
+              : "Book now"}
           </button>
         </div>
       </div>
